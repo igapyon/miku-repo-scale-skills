@@ -1,0 +1,23 @@
+{
+  "name": "miku-repo-scale-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent Skill companion scaffold for miku-repo-scale.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igapyon/miku-repo-scale-skills.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "skillRuntimeArtifacts": [
+    "runtime/miku-repo-scale-0.1.0.mjs"
+  ],
+  "scripts": {
+    "build": "npm run build:bundle:zip",
+    "build:bundle": "node scripts/build-skill-bundle.mjs",
+    "build:bundle:zip": "node scripts/build-skill-bundle-zip.mjs"
+  }
+}
