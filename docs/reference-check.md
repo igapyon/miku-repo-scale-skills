@@ -55,7 +55,9 @@ the product design; the shared UTF-16 preference is not silently substituted.
 
 ## Verification record
 
-Initial verification covers metadata and local links, script syntax, and the
-missing-runtime build rejection. Product tests, artifact execution, isolated
-bundle smoke, minimum-Node execution, and hosted CI remain pending. Exact commands
-and results are recorded after scaffold placement in development notes.
+Initial scaffold checks are historical and are recorded separately in
+[development.md](development.md). Current local checks are recorded there as
+well: Node 22.23.4 and 26.12.1 pass all 13 tests, the isolated bundle runs
+version/help/analyze, and macOS ZIP generation passes `unzip -t`. The CI matrix
+now covers Node 22/24/26 on Ubuntu/macOS/Windows, but hosted runs have not yet
+executed. Node 24 and non-macOS results remain unverified locally.

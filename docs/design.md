@@ -1,6 +1,8 @@
 # Agent Skill design
 
-Status: initial scaffold, 2026-11-05. Upstream CLI runtime is not available yet.
+Status: 2026-11-07. Upstream CLI `0.2.1` is received and pinned. RSC-14a〜d and
+RSC-15a〜b are implemented; local bundle execution and metric acceptance are
+verified. Hosted cross-platform and release checks remain.
 
 | Identity | Value |
 | --- | --- |
@@ -24,10 +26,12 @@ README is documentation; JSON may be a definition or data according to explicit
 rules. Show the measured subset and null values accurately. Never equate
 unsupported analysis with zero code lines or add overlapping breakdowns together.
 
-The target lookup is one exact artifact declared in `runtime.json`, checked
-against version and SHA-256. The manifest is created only after actual receipt;
-the scaffold has no fabricated digest. Runtime absence is a hard error.
-An unrelated workspace CLI is not an automatic fallback.
+The target lookup is one exact artifact declared in `runtime/runtime.json`,
+checked against version, source revision, schema, and SHA-256. The receipt is
+recorded in [`upstream-runtime.md`](upstream-runtime.md). A missing or changed
+artifact is a hard error. An unrelated workspace CLI is not an automatic
+fallback. The adapter invokes the pinned artifact by argument array and checks
+the result envelope and exit/status mapping before forwarding output.
 
 Upstream product specifications and shared RSC task definitions are in the
 local sibling `miku-repo-scale/docs/`. Future published references:

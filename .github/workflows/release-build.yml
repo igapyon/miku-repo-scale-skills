@@ -19,9 +19,7 @@ jobs:
         with:
           node-version: '26'
       - run: npm ci
-      - name: Build required-runtime bundle
-        # Fails while the required upstream CLI is absent.
-        # RSC-14/15 connects exact identity checks and isolated smoke before release readiness.
+      - name: Test and build release ZIP on Ubuntu
         run: npm run build
       - name: Stage versioned ZIP
         env:

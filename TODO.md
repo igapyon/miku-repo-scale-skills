@@ -2,22 +2,26 @@
 
 ## Current state
 
-2026-11-05: initial metadata, skill instructions, references, packaging skeleton,
-release workflow preparation, and a local implementation plan are prepared.
+2026-11-08: runtime receipt, integrity resolver, CLI adapter, bundle contents
+and licenses, isolated CLI smoke, and metric acceptance fixtures are implemented
+through RSC-15b. Node.js 26.12.1 `npm ci` and `npm run build` pass locally
+(13/13 tests and ZIP generation). Conversation guidance and the release workflow
+received a local desk review. Hosted Node/OS matrix and final release readiness
+remain pending.
 
 - [x] Confirm upstream URL, repository/work branch, and sister skill examples.
 - [x] Place repository conventions, basic package, and local plan.
 - [x] Add bundle entrypoints which stop when the declared CLI is absent.
-- [ ] Upstream dependency: APP RSC-01〜13 completes and produces a verified CLI.
-- [ ] Receive the real versioned runtime; fix source revision, version, SHA-256, and schema.
-- [ ] RSC-14a: runtime manifest and exact artifact verification.
-- [ ] RSC-14b: thin skill-local `lib/run.mjs` and CLI/result boundary.
-- [ ] RSC-14c: complete executable instructions and references from the verified CLI.
-- [ ] RSC-14d: package contents, licenses, required-runtime and isolation tests.
-- [ ] RSC-15a: real CLI/help/version/analyze in an isolated bundle.
-- [ ] RSC-15b: JSON/TS and instruction/definition metrics acceptance.
-- [ ] RSC-15c: minimum/current Node and OS checks; cross-platform ZIP build decision.
-- [ ] RSC-15d: conversation cases and release-readiness verification.
+- [x] Upstream dependency: APP RSC-01〜13 completes local artifact verification.
+- [x] Receive versioned runtime; record source revision, version, SHA-256, and schema.
+- [x] RSC-14a: runtime manifest and exact artifact verification.
+- [x] RSC-14b: thin skill-local `lib/run.mjs` and CLI/result boundary.
+- [x] RSC-14c: executable instructions and references from the verified CLI.
+- [x] RSC-14d: package contents, licenses, and required-runtime tests.
+- [x] RSC-15a: real CLI/help/version/analyze in an isolated bundle.
+- [x] RSC-15b: JSON/JSONL, TypeScript, and instruction/definition metrics acceptance.
+- [ ] RSC-15c: hosted Node 22/24/26 and OS matrix; Ubuntu-only ZIP build decision verified in CI. Workflow is configured but has not run on GitHub.
+- [ ] RSC-15d: conversation cases and release-readiness verification. Desk-review cases are recorded; final readiness depends on hosted RSC-15c results.
 
-See [implementation plan](docs/implementation-plan.md). The scaffold is not
-an executable replacement for the unfinished upstream product.
+See [implementation plan](docs/implementation-plan.md). This companion skill
+invokes the upstream CLI; product measurement and classification remain upstream.
