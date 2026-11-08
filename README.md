@@ -5,33 +5,44 @@ The installed skill is **`igapyon-miku-repo-scale`**. It will call a received
 Node.js CLI runtime and explain repository scale, including Markdown Agent
 instructions, JSON/YAML definitions, TypeScript, and other program sources.
 
-**Status: initial scaffold. No upstream runtime has been received. The skill is
-not operational and the bundle build intentionally rejects the missing CLI.**
+**Status: RSC-14a through RSC-15b are implemented. The verified local bundle
+runs independently with Node.js 22+, and acceptance fixtures cover instructions,
+definitions, JSON/JSONL, TypeScript, binaries, and ignored-file metadata. The
+local Node.js 26 build and ZIP packaging pass. Conversation guidance and release
+workflow have a local review; hosted OS/Node matrix results remain pending, so
+the package is not release-ready yet.**
 
 ## Structure and ownership
 
 - `skills/igapyon-miku-repo-scale/SKILL.md`: activation and operating boundary.
 - `skills/igapyon-miku-repo-scale/references/`: CLI and metric guidance.
 - `skills/igapyon-miku-repo-scale/runtime/`: received versioned CLI artifact.
+- `skills/igapyon-miku-repo-scale/licenses/`: upstream and bundled parser licenses.
 - `scripts/`: repository packaging helpers; product logic stays upstream.
 - `docs/`: local design, implementation plan, development, and reference decisions.
 
 ## Packaging entrypoints
 
 ```sh
+npm test
+npm run build
 npm run build:bundle
 npm run build:bundle:zip
 ```
 
-These entrypoints require the declared non-empty upstream CLI before creating
-output. The initial expected filename is `miku-repo-scale-0.1.0.mjs`; it is a
-planned receipt name, not a verified compatibility pin. Runtime version,
-checksum, and source revision are fixed when the real artifact is received.
+`npm run build` runs the suite and creates the release ZIP. Bundle entrypoints
+require the declared non-empty upstream CLI before creating output. The
+received artifact is `miku-repo-scale-0.2.1.mjs`, fixed by
+`runtime/runtime.json` with its source revision, result schema, and SHA-256.
+See [upstream runtime receipt](docs/upstream-runtime.md). The adapter verifies
+the pinned artifact before every invocation. The isolated smoke test installs a
+copy of the bundle in a temporary directory and runs version, help, and analyze.
 ZIP packaging currently uses the sister/starter's `zip` build tool; installed
 skill execution will need Node.js and Git only. No Java backend is planned.
 
-Do not install this scaffold as a working skill. RSC-14/15 add exact runtime
-verification, CLI/schema smoke, tests, and isolated bundle acceptance before release.
+Install the skill from the verified bundle. Do not treat the project as
+release-ready until RSC-15c and RSC-15d complete hosted cross-platform checks
+and the final conversation/release review.
 
 ## Project documents
 

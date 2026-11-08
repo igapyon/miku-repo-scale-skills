@@ -67,6 +67,9 @@ function shouldCopyBundleEntry(sourcePath) {
   if (name === ".DS_Store") {
     return false;
   }
+  if (name === ".gitkeep") {
+    return false;
+  }
   if (name === "tmp" || name === "output" || name === "state") {
     const relativePath = path.relative(sourceSkillRoot, sourcePath);
     return relativePath.split(path.sep).length > 1;

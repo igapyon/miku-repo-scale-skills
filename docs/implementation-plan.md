@@ -1,6 +1,6 @@
 # miku-repo-scale-skills 実装計画
 
-2026-11-05。状態：初期ファイル配置済み、runtime 受領・実行 adapter・検証は未着手。
+2026-11-07。状態：RSC-14a〜15bを実装・確認済み。実runtimeを含むbundleを一時環境へコピーし、version/help/analyzeが動作する。指示・定義・JSON/JSONL・TS・binary受入fixtureも通過。Node/OS matrixとrelease readinessは未完了。
 全体の RSC-00〜15 は upstream `miku-repo-scale/docs/implementation-plan.md` に保存する。
 この文書は companion repository の担当作業を具体化する。
 
@@ -15,8 +15,8 @@
 - 依存: upstream RSC-01〜13 が契約・CLI・実動 artifact を完成すること。
 
 README、package、規約、SKILL.md、reference、bundle skeleton、release workflow を配置済み。
-runtime 不在を理由にダミー CLI を同梱したり、計測を skill へ実装したりしない。
-required-runtime の受領前は実行 wiring・bundle smoke 完了とは記録しない。
+RSC-14aでupstream CLI artifactを受領し、manifestとdigest検証を追加した。
+計測ロジックをskillへ重複実装せず、RSC-14b/14d/15a完了前は実動済みと記録しない。
 
 ## 2. 実装作業
 
@@ -28,12 +28,13 @@ required-runtime の受領前は実行 wiring・bundle smoke 完了とは記録�
 | RSC-14c | `SKILL.md`、`references/cli.md`、`references/metrics.md` | 14b | 確認した操作、役割・拡張子・coverage、hard error を簡潔に案内できる |
 | RSC-14d | `scripts/`、`tests/`、package | 14a〜c | required files/ライセンスを同梱。runtime不在で失敗し、dev filesを除外 |
 | RSC-15a | `tests/isolated-bundle-smoke.test.mjs` | 14d | 一時展開先で CLI version/help/analyze が動き、元 source を参照しない |
-| RSC-15b | 複数形式の受入 fixture | 15a | Markdownの指示、JSON定義/評価データ、TS等の内訳とnull/coverageが正しい |
-| RSC-15c | OS/Node検証、ZIP build | 15a | Node22/24/26と対象OSの結果を記録。ZIP外部toolの可搬性を決定・検証 |
+| RSC-15b | `tests/acceptance.test.mjs` | 15a | Markdownの指示、JSON定義/評価データ、JSONL、TS、binary、ignore metadata、role/coverageが正しい |
+| RSC-15c | `.github/workflows/ci.yml`、ZIP build | 15a | Node22/24/26 × Ubuntu/macOS/Windows を hosted CI で確認。ZIPはUbuntu runner限定とし、bundle jobで検証 |
 | RSC-15d | 対話確認、README/TODO/開発記録、release workflow | 15b〜c | 実装済み/未確認を分け、実runtimeとisolated smoke成功後に配布可能とする |
 
-初回に実装するのは「受領」と RSC-14a。各作業で対象テスト・差分・実施結果を記録する。
-`npm test` は意味のある executable tests を追加した段階で定義する。
+「受領」と RSC-14a〜15b は完了。各作業で対象テスト・差分・実施結果を記録する。
+`npm test` はruntime integrity、adapter、bundle/ZIP contents、isolated CLI smoke、metric acceptanceを実行する。
+RSC-15cのCI workflowは配置済みだが、hosted matrix結果は未確認。
 
 ## 3. 重要な受入ケース
 
@@ -46,11 +47,24 @@ required-runtime の受領前は実行 wiring・bundle smoke 完了とは記録�
 - 大きなfiles配列を無条件に会話へ出さず、summaryとcoverageを使う。
 - 単なる名前言及・説明依頼は計測を実行しない。利用指示は文脈から対象を解決する。
 
+### RSC-15d 対話受入ケース（2026-11-08 desk review）
+
+以下を SKILL.md と references に照らしてレビューする。これは指示文の
+desk review であり、Hosted CI や別エージェント上での会話実行結果ではない。
+
+| 会話 | 期待動作 | レビュー結果 |
+| --- | --- | --- |
+| 「このリポジトリを miku-repo-scale で分析して」 | 文脈から対象を解決し、summaryで実行 | summaryを標準とし、対象不明なら確認する手順あり |
+| 「miku-repo-scaleとは？」または名前だけの言及 | 説明だけを返し、計測しない | 明示依頼・合意済み継続だけで起動する境界あり |
+| 「大きいファイル、バイナリ、ignore対象の名前とサイズを見せて」 | `--detail files --inventory all` を使い、要求された項目に絞る | 2026-11-08に選択手順を追加。untracked/ignoredの内容は読まない |
+| 対象リポジトリが会話から分からない | 推測せず対象を確認 | 対象が曖昧な場合だけ確認する手順あり |
+| analyzerがpartial/error、またはコード行がnull | status、diagnostics、coverageを保ち、nullを0にしない | SKILL.md と metrics reference に明記 |
+| pinned runtimeが欠損または改変 | unavailableとして報告し、別CLIへフォールバックしない | SKILL.md と runtime tests に明記 |
+
 ## 4. 配布準備の現状
 
-`build:bundle` / `build:bundle:zip` は starter の骨格を配置済み。
-現在は実 runtime 不在で停止する。存在検査だけで実動保証とせず、RSC-14d/15aで
-実際のversion/help/analyzeとmanifest検証をbuild/releaseへ接続する。
-現workflowはrelease公開時の入口を用意するもの。upstream runtimeがなくbuildが失敗する間は配布不可。
+`build:bundle` は受領済みのexact runtimeとlicense noticesを含むbundleを生成する。
+isolated CLI smokeはversion/help/analyzeを確認する。macOSの`npm run build`で13 testsが通り、ZIPの内容検査も成功した。2026-11-08にNode.js 26.12.1でも`npm ci`と`npm run build`（13 tests、ZIP生成）が成功した。対話ケースとrelease workflowのdesk reviewは記録済み。RSC-15c hosted matrixは未実行で、RSC-15dの最終release-readiness判定も保留する。
+現workflowはrelease公開時の入口を用意するもの。hosted runtime buildは未実施。
 
 先行変更を保持し、既存LICENSEと作業branchを維持する。GitHubへの公開・pushはこの初期配置作業に含めない。
