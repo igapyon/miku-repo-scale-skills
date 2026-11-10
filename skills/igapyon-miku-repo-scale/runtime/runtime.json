@@ -1,10 +1,10 @@
 {
   "schema_version": "miku-repo-scale.skill-runtime/v1",
   "product": "miku-repo-scale",
-  "artifact": "miku-repo-scale-0.2.7.mjs",
-  "version": "0.2.7",
+  "artifact": "miku-repo-scale-0.2.10.mjs",
+  "version": "0.2.10",
   "ruleset_version": "1.4.0",
   "result_schema_version": "miku-repo-scale.result/v1",
-  "source_revision": "03c796ecf29bbc14320d0a13e3d317c6f9b32d23",
-  "sha256": "72404da15306ed85e16ac0a5d44e75871b76b9b9e1c9318cd61bdcf332b11ca0"
+  "source_revision": "95fbff6dd23f550e34af4aa8ceed14e69957c612",
+  "sha256": "d36619b2af6d4cb6c3d798b73b48d3fbfc26cf4043370bc107e8dfdc255e283f"
 }

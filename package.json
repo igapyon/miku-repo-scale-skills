@@ -1,6 +1,6 @@
 {
   "name": "miku-repo-scale-skills",
-  "version": "0.2.7",
+  "version": "0.2.10",
   "private": true,
   "description": "Agent Skill companion for miku-repo-scale.",
   "license": "Apache-2.0",
@@ -13,7 +13,7 @@
     "node": ">=22"
   },
   "skillRuntimeArtifacts": [
-    "runtime/miku-repo-scale-0.2.7.mjs"
+    "runtime/miku-repo-scale-0.2.10.mjs"
   ],
   "scripts": {
     "build": "npm test && npm run build:bundle:zip",

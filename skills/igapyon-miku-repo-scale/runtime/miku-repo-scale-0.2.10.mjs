@@ -4,7 +4,7 @@
 // package.json
 var package_default = {
   name: "miku-repo-scale",
-  version: "0.2.7",
+  version: "0.2.10",
   private: true,
   description: "Deterministic measurement of repository text, source code, instructions, data, and binary assets.",
   license: "Apache-2.0",
@@ -57,7 +57,7 @@ var package_default = {
 
 // src/analyze.mjs
 import { closeSync as closeSync2, openSync as openSync2, readFileSync, realpathSync as realpathSync3, unlinkSync, writeFileSync } from "node:fs";
-import { basename as basename2, dirname, relative as relative3, resolve as resolve3, sep as sep3 } from "node:path";
+import { basename as basename2, dirname as dirname2, relative as relative3, resolve as resolve3, sep as sep3 } from "node:path";
 
 // src/classification.mjs
 import { basename, extname } from "node:path";
@@ -397,8 +397,8 @@ function assertResultInvariants(result) {
 
 // src/git-inventory.mjs
 import { execFileSync, spawnSync } from "node:child_process";
-import { lstatSync, readdirSync, realpathSync } from "node:fs";
-import { isAbsolute, relative, resolve, sep } from "node:path";
+import { lstatSync, readdirSync, realpathSync, statSync } from "node:fs";
+import { dirname, isAbsolute, relative, resolve, sep, win32 } from "node:path";
 function gitText(root, args3) {
   const output = execFileSync("git", ["-C", root, ...args3], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 3e4 });
   return stripGitLineEnding(output);
@@ -664,9 +664,38 @@ function currentIndexFingerprint(root) {
     return null;
   }
 }
-function isInsideGitAdministration(path, gitDir, commonDir) {
-  const normalized = resolve(path);
-  return [gitDir, commonDir].some((directory) => normalized === directory || normalized.startsWith(`${directory}${sep}`));
+function gitReportsInsideGitDirectory(path) {
+  let directory = dirname(path);
+  while (true) {
+    try {
+      const canonical = realpathSync(directory);
+      if (statSync(canonical).isDirectory()) {
+        directory = canonical;
+        break;
+      }
+    } catch {
+    }
+    const parent = dirname(directory);
+    if (parent === directory) return false;
+    directory = parent;
+  }
+  const result = spawnSync("git", ["-C", directory, "rev-parse", "--is-inside-git-dir"], {
+    encoding: "buffer",
+    stdio: ["ignore", "pipe", "ignore"],
+    timeout: 1e4
+  });
+  return !result.error && result.status === 0 && stripGitLineEnding(result.stdout.toString("utf8")) === "true";
+}
+function isInsideGitAdministration(path, gitDir, commonDir, platform = process.platform) {
+  const pathApi = platform === "win32" ? win32 : { resolve };
+  const normalized = pathApi.resolve(path);
+  const comparisonPath = platform === "win32" ? normalized.toLowerCase() : normalized;
+  const separator = platform === "win32" ? "\\" : sep;
+  return [gitDir, commonDir].some((directory) => {
+    const base = pathApi.resolve(directory);
+    const comparisonBase = platform === "win32" ? base.toLowerCase() : base;
+    return comparisonPath === comparisonBase || comparisonPath.startsWith(`${comparisonBase}${separator}`);
+  }) || platform === process.platform && gitReportsInsideGitDirectory(normalized);
 }
 
 // src/physical-lines.mjs
@@ -3403,7 +3432,7 @@ function saveResult(result, outputPath, root, inventory) {
   const requestedTarget = resolve3(outputPath);
   let target = requestedTarget;
   try {
-    target = resolve3(realpathSync3(dirname(requestedTarget)), basename2(requestedTarget));
+    target = resolve3(realpathSync3(dirname2(requestedTarget)), basename2(requestedTarget));
   } catch {
   }
   if (isInsideGitAdministration(target, inventory.gitDir, inventory.commonDir)) throw new Error("Output cannot be written inside Git administrative data");

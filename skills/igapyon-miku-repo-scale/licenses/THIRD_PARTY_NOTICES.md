@@ -1,7 +1,7 @@
 # Runtime and skill notices
 
 The skill bundle contains the upstream `miku-repo-scale` CLI runtime version
-`0.2.7` under its Apache-2.0 license. A copy of the upstream product license
+`0.2.10` under its Apache-2.0 license. A copy of the upstream product license
 is `miku-repo-scale-LICENSE`. The skill adapter is distributed under the
 companion repository's Apache-2.0 license, copied as
 `miku-repo-scale-skills-LICENSE`.

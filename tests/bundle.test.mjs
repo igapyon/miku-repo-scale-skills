@@ -19,10 +19,10 @@ function fixture(t, { runtimePresent = true } = {}) {
   mkdirSync(join(skill, "licenses"), { recursive: true });
   cpSync(buildScript, join(scripts, "build-skill-bundle.mjs"));
   writeFileSync(join(root, "package.json"), JSON.stringify({
-    skillRuntimeArtifacts: ["runtime/miku-repo-scale-0.2.7.mjs"],
+    skillRuntimeArtifacts: ["runtime/miku-repo-scale-0.2.10.mjs"],
   }));
   writeFileSync(join(skill, "SKILL.md"), "skill instructions\n");
-  writeFileSync(join(skill, "runtime/runtime.json"), '{"artifact":"miku-repo-scale-0.2.7.mjs"}\n');
+  writeFileSync(join(skill, "runtime/runtime.json"), '{"artifact":"miku-repo-scale-0.2.10.mjs"}\n');
   writeFileSync(join(skill, "runtime/.gitkeep"), "");
   writeFileSync(join(skill, "lib/run.mjs"), "export {};\n");
   writeFileSync(join(skill, "licenses/THIRD_PARTY_NOTICES.md"), "license notices\n");
@@ -37,7 +37,7 @@ function fixture(t, { runtimePresent = true } = {}) {
     "tree-sitter-java-MIT.txt",
     "tree-sitter-bash-MIT.txt",
   ]) writeFileSync(join(skill, "licenses", license), `license: ${license}\n`);
-  if (runtimePresent) writeFileSync(join(skill, "runtime/miku-repo-scale-0.2.7.mjs"), "runtime\n");
+  if (runtimePresent) writeFileSync(join(skill, "runtime/miku-repo-scale-0.2.10.mjs"), "runtime\n");
   writeFileSync(join(skill, ".DS_Store"), "finder metadata");
   mkdirSync(join(skill, "tmp"), { recursive: true });
   writeFileSync(join(skill, "tmp/should-not-ship.txt"), "scratch\n");
@@ -52,7 +52,7 @@ test("bundle includes the pinned runtime, adapter, and all required license text
   for (const relative of [
     "SKILL.md",
     "runtime/runtime.json",
-    "runtime/miku-repo-scale-0.2.7.mjs",
+    "runtime/miku-repo-scale-0.2.10.mjs",
     "lib/run.mjs",
     "licenses/THIRD_PARTY_NOTICES.md",
     "licenses/miku-repo-scale-LICENSE",
@@ -71,7 +71,7 @@ test("bundle includes the pinned runtime, adapter, and all required license text
   assert.equal(existsSync(join(bundle, "tmp")), false);
   assert.equal(existsSync(join(bundle, "runtime/.gitkeep")), false);
   assert.equal(existsSync(join(root, "bundle/miku-repo-scale-skills/tests")), false);
-  assert.match(readFileSync(join(bundle, "runtime/runtime.json"), "utf8"), /miku-repo-scale-0\.2\.7\.mjs/u);
+  assert.match(readFileSync(join(bundle, "runtime/runtime.json"), "utf8"), /miku-repo-scale-0\.2\.10\.mjs/u);
 });
 
 test("bundle build stops before creating output when the required runtime is missing", (t) => {
@@ -100,7 +100,7 @@ test("release ZIP contains the installable skill tree and excludes development f
     "skills/igapyon-miku-repo-scale/SKILL.md",
     "skills/igapyon-miku-repo-scale/lib/run.mjs",
     "skills/igapyon-miku-repo-scale/runtime/runtime.json",
-    "skills/igapyon-miku-repo-scale/runtime/miku-repo-scale-0.2.7.mjs",
+    "skills/igapyon-miku-repo-scale/runtime/miku-repo-scale-0.2.10.mjs",
     "skills/igapyon-miku-repo-scale/licenses/THIRD_PARTY_NOTICES.md",
   ]) assert.ok(entries.includes(required), `${required} is in the ZIP`);
   assert.equal(entries.some((entry) => entry.startsWith("tests/")), false);

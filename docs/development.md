@@ -1,7 +1,7 @@
 # Development
 
-2026-11-10: upstream CLI `0.2.7` was received from Release `v0.2.7`, source
-revision `03c796ecf29bbc14320d0a13e3d317c6f9b32d23`. RSC-14a〜d and RSC-15a〜b now
+2026-11-10: upstream CLI `0.2.10` was received from Release `v0.2.10`, source
+revision `95fbff6dd23f550e34af4aa8ceed14e69957c612`. RSC-14a〜d and RSC-15a〜b now
 verify the pinned runtime, adapter, licenses, bundle contents, and isolated
 version/help/analyze execution plus metric acceptance. Node.js 26.12.1
 `npm run build` passes after the refresh. RSC-15c〜d remain.
@@ -130,7 +130,7 @@ measurement tests, usable runtime, real bundle smoke, or hosted workflows were r
   `bundle/igapyon-miku-repo-scale-skills-0.2.5.zip`. Hosted Node/OS matrix
   verification after the runtime refresh remains pending.
 
-## Windows root detection follow-up and upstream CLI 0.2.7 (2026-11-10)
+## Windows root detection follow-up and upstream CLI 0.2.7 (2026-11-10; historical)
 
 - The hosted Windows failure reported `ROOT_NOT_REPOSITORY_ROOT` when analyzing
   a Git repository created under the Windows temporary directory. Upstream
@@ -145,3 +145,21 @@ measurement tests, usable runtime, real bundle smoke, or hosted workflows were r
 - Node.js 26.12.1 `npm run build`: all 13 tests pass, including the partial/error
   CLI case, and the `0.2.7` release ZIP is generated. The hosted Windows matrix
   still needs to run against this update.
+
+## Git administrative path protection and upstream CLI 0.2.10 (2026-11-10)
+
+- Imported the standalone CLI from upstream Release `v0.2.10`. Its asset is
+  6,515,869 bytes with SHA-256
+  `d36619b2af6d4cb6c3d798b73b48d3fbfc26cf4043370bc107e8dfdc255e283f`; source
+  revision `95fbff6dd23f550e34af4aa8ceed14e69957c612`.
+- This release retains the Windows root-detection fix and strengthens checks
+  that reject report output inside Git administrative data, including Windows
+  path case differences and paths resolved differently by Git. The result
+  schema and ruleset remain `miku-repo-scale.result/v1` and `1.4.0`.
+- Package, lockfile, runtime manifest, artifact declaration, tests, and current
+  docs now follow `0.2.10`. Companion hosted Node/OS matrix confirmation remains
+  pending.
+- Node.js 26.12.1 `npm run build`: all 13 tests pass, including isolated bundle
+  execution and the partial/error CLI cases; generated
+  `bundle/igapyon-miku-repo-scale-skills-0.2.10.zip`. The companion hosted
+  matrix remains to be run.

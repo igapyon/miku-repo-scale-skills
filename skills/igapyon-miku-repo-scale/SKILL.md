@@ -28,7 +28,8 @@ analysis. Keep product classification and metric semantics in upstream.
    in scope. That inventory returns metadata only for those entries. Filter or
    summarize file arrays to the requested set; return the full list only when
    asked. Use `--output <new-file>` only when the user requests a saved JSON
-   report and provides or agrees to its destination.
+   report and provides or agrees to its destination. The CLI rejects output
+   destinations inside Git administrative data.
 3. Invoke `node lib/run.mjs analyze <repository-root> [options]`. The adapter
    verifies the exact runtime and result envelope before forwarding JSON. See
    [CLI reference](references/cli.md).
