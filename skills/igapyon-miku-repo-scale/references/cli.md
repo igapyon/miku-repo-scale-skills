@@ -1,6 +1,6 @@
 # CLI operation and runtime
 
-Runtime `0.2.7` is pinned by [`runtime/runtime.json`](../runtime/runtime.json).
+Runtime `0.2.10` is pinned by [`runtime/runtime.json`](../runtime/runtime.json).
 The thin adapter verifies the runtime digest and embedded version, invokes it
 with an argument array, parses result JSON, and checks the result schema marker,
 required envelope fields, coverage counts, ruleset, and exit-code/status match.
@@ -34,3 +34,4 @@ summary detail unless the user asks for per-file information. Use
 sizes, and ignore evidence are metadata, and their contents are not read.
 Filter large file-detail results to the user's requested paths or attributes.
 Create `--output <new-file>` only when the user requests a saved JSON report.
+The CLI rejects destinations inside Git administrative data.
