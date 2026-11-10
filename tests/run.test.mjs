@@ -25,7 +25,7 @@ function repository(t, entries = {}) {
 test("passes help and version through and checks the embedded version", () => {
   const version = runCli(["--version"], { skillRoot });
   assert.equal(version.exitCode, 0);
-  assert.equal(version.stdout, "miku-repo-scale 0.2.5\n");
+  assert.equal(version.stdout, "miku-repo-scale 0.2.7\n");
 
   const help = runCli(["--help"], { skillRoot });
   assert.equal(help.exitCode, 0);
@@ -40,7 +40,7 @@ test("returns a schema-checked summary and preserves the CLI exit status", (t) =
   const output = runCli(["analyze", root, "--detail", "summary"], { skillRoot });
   assert.equal(output.exitCode, 0, JSON.stringify(output.result.diagnostics));
   assert.equal(output.result.schema_version, "miku-repo-scale.result/v1");
-  assert.equal(output.result.tool.version, "0.2.5");
+  assert.equal(output.result.tool.version, "0.2.7");
   assert.equal(output.result.tool.ruleset_version, "1.4.0");
   assert.equal(output.result.summary.coverage.lexically_classified_files, 1);
   assert.equal(output.result.files, undefined);

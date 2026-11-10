@@ -1,7 +1,7 @@
 # Development
 
-2026-11-10: upstream CLI `0.2.5` was received from Release `v0.2.5`, source
-revision `537fed9edf2e9311f494cda4a5b594395652df2d`. RSC-14a〜d and RSC-15a〜b now
+2026-11-10: upstream CLI `0.2.7` was received from Release `v0.2.7`, source
+revision `03c796ecf29bbc14320d0a13e3d317c6f9b32d23`. RSC-14a〜d and RSC-15a〜b now
 verify the pinned runtime, adapter, licenses, bundle contents, and isolated
 version/help/analyze execution plus metric acceptance. Node.js 26.12.1
 `npm run build` passes after the refresh. RSC-15c〜d remain.
@@ -115,7 +115,7 @@ measurement tests, usable runtime, real bundle smoke, or hosted workflows were r
   reaches GitHub; RSC-15c and release readiness remain open.
 - No branch push, tag, or GitHub Release was created.
 
-## Upstream CLI 0.2.5 refresh (2026-11-10)
+## Upstream CLI 0.2.5 refresh (2026-11-10; historical)
 
 - Imported `miku-repo-scale-0.2.5.mjs` from upstream Release `v0.2.5`, source
   revision `537fed9edf2e9311f494cda4a5b594395652df2d`.
@@ -129,3 +129,19 @@ measurement tests, usable runtime, real bundle smoke, or hosted workflows were r
 - Node.js 26.12.1 `npm run build`: 13/13 tests passed and generated
   `bundle/igapyon-miku-repo-scale-skills-0.2.5.zip`. Hosted Node/OS matrix
   verification after the runtime refresh remains pending.
+
+## Windows root detection follow-up and upstream CLI 0.2.7 (2026-11-10)
+
+- The hosted Windows failure reported `ROOT_NOT_REPOSITORY_ROOT` when analyzing
+  a Git repository created under the Windows temporary directory. Upstream
+  `v0.2.6` fixes this by using Git's `rev-parse --show-prefix` instead of
+  comparing canonical path strings. The fix remains in `v0.2.7`.
+- Imported the standalone CLI from upstream Release `v0.2.7`. Its release asset
+  digest is `72404da15306ed85e16ac0a5d44e75871b76b9b9e1c9318cd61bdcf332b11ca0`,
+  and the pinned source revision is `03c796ecf29bbc14320d0a13e3d317c6f9b32d23`.
+- Package, lockfile, manifest, runtime declaration, tests, and current docs now
+  follow `0.2.7`; the old `0.2.5` artifact was removed. Hosted Windows
+  confirmation remains pending.
+- Node.js 26.12.1 `npm run build`: all 13 tests pass, including the partial/error
+  CLI case, and the `0.2.7` release ZIP is generated. The hosted Windows matrix
+  still needs to run against this update.

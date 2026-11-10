@@ -26,7 +26,7 @@ test("copied bundle runs version, help, and analyze without the source checkout"
 
   const runner = join(installedSkill, "lib/run.mjs");
   const options = { cwd: installedSkill, encoding: "utf8" };
-  assert.equal(execFileSync(process.execPath, [runner, "--version"], options).trim(), "miku-repo-scale 0.2.5");
+  assert.equal(execFileSync(process.execPath, [runner, "--version"], options).trim(), "miku-repo-scale 0.2.7");
   assert.match(execFileSync(process.execPath, [runner, "--help"], options), /miku-repo-scale analyze/u);
 
   const analysis = spawnSync(process.execPath, [runner, "analyze", repository, "--detail", "summary"], options);
@@ -34,6 +34,6 @@ test("copied bundle runs version, help, and analyze without the source checkout"
   const result = JSON.parse(analysis.stdout);
   assert.equal(result.schema_version, "miku-repo-scale.result/v1");
   assert.equal(result.status, "ok");
-  assert.equal(result.tool.version, "0.2.5");
+  assert.equal(result.tool.version, "0.2.7");
   assert.equal(result.summary.coverage.lexically_classified_files, 1);
 });

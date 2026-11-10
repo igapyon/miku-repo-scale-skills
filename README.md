@@ -32,7 +32,7 @@ npm run build:bundle:zip
 
 `npm run build` runs the suite and creates the release ZIP. Bundle entrypoints
 require the declared non-empty upstream CLI before creating output. The
-received artifact is `miku-repo-scale-0.2.5.mjs`, fixed by
+received artifact is `miku-repo-scale-0.2.7.mjs`, fixed by
 `runtime/runtime.json` with its source revision, result schema, and SHA-256.
 See [upstream runtime receipt](docs/upstream-runtime.md). The adapter verifies
 the pinned artifact before every invocation. The isolated smoke test installs a
