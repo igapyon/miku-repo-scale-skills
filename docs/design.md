@@ -1,6 +1,6 @@
 # Agent Skill design
 
-Status: 2026-11-07. Upstream CLI `0.2.1` is received and pinned. RSC-14a〜d and
+Status: 2026-11-10. Upstream CLI `0.2.5` is received and pinned. RSC-14a〜d and
 RSC-15a〜b are implemented; local bundle execution and metric acceptance are
 verified. Hosted cross-platform and release checks remain.
 

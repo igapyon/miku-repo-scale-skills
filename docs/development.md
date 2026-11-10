@@ -1,9 +1,10 @@
 # Development
 
-2026-11-07: upstream runtime `0.2.1` was received from source revision
-`ad09e61d8a50d39ebaa50dfad7521d4acd53b02b`. RSC-14a〜d and RSC-15a〜b now
+2026-11-10: upstream CLI `0.2.5` was received from Release `v0.2.5`, source
+revision `537fed9edf2e9311f494cda4a5b594395652df2d`. RSC-14a〜d and RSC-15a〜b now
 verify the pinned runtime, adapter, licenses, bundle contents, and isolated
-version/help/analyze execution plus metric acceptance. RSC-15c〜d remain.
+version/help/analyze execution plus metric acceptance. Node.js 26.12.1
+`npm run build` passes after the refresh. RSC-15c〜d remain.
 
 ## Environment
 
@@ -19,8 +20,9 @@ version/help/analyze execution plus metric acceptance. RSC-15c〜d remain.
 Keep all installable helpers inside `skills/igapyon-miku-repo-scale/` (under
 `lib/` when added). Root `scripts/` only owns repository build/release helpers.
 No source index is adopted. Runtime is a received artifact, not a local build
-of copied upstream sources. Keep the package version in `package.json` and
-`package-lock.json`; it is independent of the upstream runtime version.
+of copied upstream sources. The package and lockfile versions track the pinned
+upstream CLI release; the runtime manifest also pins its source, schema, and
+digest.
 
 The initial work branch is `devel-tiga1105wcg`; check actual Git state on resume.
 Use `workplace/` locally and track only its `.gitkeep`. Keep generated bundles,
@@ -93,3 +95,37 @@ Prepared files were checked in an isolated staging directory before placement:
 
 This verifies scaffold preparation and the missing-runtime boundary. No product
 measurement tests, usable runtime, real bundle smoke, or hosted workflows were run.
+
+
+## Windows matrix follow-up and upstream runtime 0.2.2 (2026-11-08)
+
+- The first hosted matrix passed Ubuntu and macOS jobs but failed the Windows
+  Node.js 22/24/26 jobs. Windows Node.js 22 showed four analyze-related test
+  failures: metric acceptance, isolated bundle smoke, and both CLI adapter
+  summary/partial cases. The first log did not print the result diagnostics, so
+  the exact Git failure remains unconfirmed.
+- Upstream commit `8cef6ed97a681b02549f4f4068b672e1b1cb974b` provides CLI `0.2.2`, including
+  Windows CRLF handling for Git text output. The received standalone CLI is
+  6,514,645 bytes with SHA-256 `60f7ed1c6dff468a3d733212c95da70a4135d99ddc3e018963ab787a28328430`.
+- Tests now include structured diagnostics in assertion failures. The isolated
+  smoke test also captures the CLI status and output instead of hiding it in a
+  generic child-process exception.
+- Local Node.js 26.12.1 build verification: 13 tests passed and the ZIP bundle
+  generated. The hosted Windows matrix must still rerun after the runtime update
+  reaches GitHub; RSC-15c and release readiness remain open.
+- No branch push, tag, or GitHub Release was created.
+
+## Upstream CLI 0.2.5 refresh (2026-11-10)
+
+- Imported `miku-repo-scale-0.2.5.mjs` from upstream Release `v0.2.5`, source
+  revision `537fed9edf2e9311f494cda4a5b594395652df2d`.
+- The 6,514,645-byte artifact SHA-256 matches the Release digest recorded in
+  `docs/upstream-runtime.md`. Its `--version`, `--help`, and summary `analyze`
+  smoke all passed; the result reports schema `miku-repo-scale.result/v1` and
+  ruleset `1.4.0`.
+- Package, lockfile, runtime manifest, artifact declaration, and test expectations
+  now follow version `0.2.5`. The parser package versions remain aligned with
+  the upstream v0.2.5 package metadata.
+- Node.js 26.12.1 `npm run build`: 13/13 tests passed and generated
+  `bundle/igapyon-miku-repo-scale-skills-0.2.5.zip`. Hosted Node/OS matrix
+  verification after the runtime refresh remains pending.

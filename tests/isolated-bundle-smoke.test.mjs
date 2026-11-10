@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -26,13 +26,14 @@ test("copied bundle runs version, help, and analyze without the source checkout"
 
   const runner = join(installedSkill, "lib/run.mjs");
   const options = { cwd: installedSkill, encoding: "utf8" };
-  assert.equal(execFileSync(process.execPath, [runner, "--version"], options).trim(), "miku-repo-scale 0.2.1");
+  assert.equal(execFileSync(process.execPath, [runner, "--version"], options).trim(), "miku-repo-scale 0.2.5");
   assert.match(execFileSync(process.execPath, [runner, "--help"], options), /miku-repo-scale analyze/u);
 
-  const output = execFileSync(process.execPath, [runner, "analyze", repository, "--detail", "summary"], options);
-  const result = JSON.parse(output);
+  const analysis = spawnSync(process.execPath, [runner, "analyze", repository, "--detail", "summary"], options);
+  assert.equal(analysis.status, 0, `${analysis.stderr}\n${analysis.stdout}`);
+  const result = JSON.parse(analysis.stdout);
   assert.equal(result.schema_version, "miku-repo-scale.result/v1");
   assert.equal(result.status, "ok");
-  assert.equal(result.tool.version, "0.2.1");
+  assert.equal(result.tool.version, "0.2.5");
   assert.equal(result.summary.coverage.lexically_classified_files, 1);
 });

@@ -1,6 +1,6 @@
 # miku-repo-scale-skills 実装計画
 
-2026-11-07。状態：RSC-14a〜15bを実装・確認済み。実runtimeを含むbundleを一時環境へコピーし、version/help/analyzeが動作する。指示・定義・JSON/JSONL・TS・binary受入fixtureも通過。Node/OS matrixとrelease readinessは未完了。
+2026-11-10。状態：RSC-14a〜15bを実装・確認済み。upstream CLI 0.2.5（source revision 537fed9edf2e9311f494cda4a5b594395652df2d）をGitHub Releaseから受領・検証した。初回hosted matrixはUbuntu/macOS成功、Windows失敗。新runtimeでの再実行を待つ。Node/OS matrixとrelease readinessは未完了。
 全体の RSC-00〜15 は upstream `miku-repo-scale/docs/implementation-plan.md` に保存する。
 この文書は companion repository の担当作業を具体化する。
 
@@ -11,7 +11,7 @@
 - 初期 branch: `devel-tiga1105wcg`。再開時は現在の Git 状態を優先する。
 - upstream: `https://github.com/igapyon/miku-repo-scale`
 - installed skill: `igapyon-miku-repo-scale`
-- package 初期版: `0.1.0`。upstream runtime との同版を永続要件にしない。
+- package 初期版: `0.1.0`。現在はユーザー指示により pinned upstream CLI と package version を `0.2.5` に揃える。
 - 依存: upstream RSC-01〜13 が契約・CLI・実動 artifact を完成すること。
 
 README、package、規約、SKILL.md、reference、bundle skeleton、release workflow を配置済み。

@@ -4,7 +4,7 @@
 // package.json
 var package_default = {
   name: "miku-repo-scale",
-  version: "0.2.1",
+  version: "0.2.5",
   private: true,
   description: "Deterministic measurement of repository text, source code, instructions, data, and binary assets.",
   license: "Apache-2.0",
@@ -401,6 +401,10 @@ import { lstatSync, readdirSync, realpathSync } from "node:fs";
 import { isAbsolute, relative, resolve, sep } from "node:path";
 function gitText(root, args3) {
   const output = execFileSync("git", ["-C", root, ...args3], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 3e4 });
+  return stripGitLineEnding(output);
+}
+function stripGitLineEnding(output, platform = process.platform) {
+  if (platform === "win32" && output.endsWith("\r\n")) return output.slice(0, -2);
   return output.endsWith("\n") ? output.slice(0, -1) : output;
 }
 function resolveRepositoryRoot(requestedRoot) {

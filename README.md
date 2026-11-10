@@ -32,13 +32,14 @@ npm run build:bundle:zip
 
 `npm run build` runs the suite and creates the release ZIP. Bundle entrypoints
 require the declared non-empty upstream CLI before creating output. The
-received artifact is `miku-repo-scale-0.2.1.mjs`, fixed by
+received artifact is `miku-repo-scale-0.2.5.mjs`, fixed by
 `runtime/runtime.json` with its source revision, result schema, and SHA-256.
 See [upstream runtime receipt](docs/upstream-runtime.md). The adapter verifies
 the pinned artifact before every invocation. The isolated smoke test installs a
 copy of the bundle in a temporary directory and runs version, help, and analyze.
 ZIP packaging currently uses the sister/starter's `zip` build tool; installed
 skill execution will need Node.js and Git only. No Java backend is planned.
+The package version tracks the pinned upstream CLI release.
 
 Install the skill from the verified bundle. Do not treat the project as
 release-ready until RSC-15c and RSC-15d complete hosted cross-platform checks

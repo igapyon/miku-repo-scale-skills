@@ -25,7 +25,7 @@ function repository(t, entries = {}) {
 test("passes help and version through and checks the embedded version", () => {
   const version = runCli(["--version"], { skillRoot });
   assert.equal(version.exitCode, 0);
-  assert.equal(version.stdout, "miku-repo-scale 0.2.1\n");
+  assert.equal(version.stdout, "miku-repo-scale 0.2.5\n");
 
   const help = runCli(["--help"], { skillRoot });
   assert.equal(help.exitCode, 0);
@@ -38,9 +38,9 @@ test("returns a schema-checked summary and preserves the CLI exit status", (t) =
     "src/example.js": "const value = 1; // sample\n",
   });
   const output = runCli(["analyze", root, "--detail", "summary"], { skillRoot });
-  assert.equal(output.exitCode, 0);
+  assert.equal(output.exitCode, 0, JSON.stringify(output.result.diagnostics));
   assert.equal(output.result.schema_version, "miku-repo-scale.result/v1");
-  assert.equal(output.result.tool.version, "0.2.1");
+  assert.equal(output.result.tool.version, "0.2.5");
   assert.equal(output.result.tool.ruleset_version, "1.4.0");
   assert.equal(output.result.summary.coverage.lexically_classified_files, 1);
   assert.equal(output.result.files, undefined);
@@ -49,7 +49,7 @@ test("returns a schema-checked summary and preserves the CLI exit status", (t) =
 test("preserves partial and error result states", (t) => {
   const partialRoot = repository(t, { "invalid.txt": Buffer.from([0xff]) });
   const partial = runCli(["analyze", partialRoot, "--detail", "summary"], { skillRoot });
-  assert.equal(partial.result.status, "partial");
+  assert.equal(partial.result.status, "partial", JSON.stringify(partial.result.diagnostics));
   assert.equal(partial.exitCode, 2);
 
   const missingParent = mkdtempSync(join(tmpdir(), "miku-repo-scale-skill-error-"));
