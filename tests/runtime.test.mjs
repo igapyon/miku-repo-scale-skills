@@ -19,11 +19,11 @@ function fixture(t, overrides = {}) {
   const manifest = {
     schema_version: "miku-repo-scale.skill-runtime/v1",
     product: "miku-repo-scale",
-    artifact: "miku-repo-scale-0.2.5.mjs",
-    version: "0.2.5",
+    artifact: "miku-repo-scale-0.2.7.mjs",
+    version: "0.2.7",
     ruleset_version: "1.4.0",
     result_schema_version: "miku-repo-scale.result/v1",
-    source_revision: "537fed9edf2e9311f494cda4a5b594395652df2d",
+    source_revision: "03c796ecf29bbc14320d0a13e3d317c6f9b32d23",
     sha256: createHash("sha256").update(payload).digest("hex"),
     ...overrides,
   };
@@ -35,12 +35,12 @@ function fixture(t, overrides = {}) {
 
 test("resolves the received CLI against its exact version, schema, source, and digest", () => {
   const resolved = resolveRuntime(skillRoot);
-  assert.equal(resolved.manifest.version, "0.2.5");
+  assert.equal(resolved.manifest.version, "0.2.7");
   assert.equal(resolved.manifest.ruleset_version, "1.4.0");
   assert.equal(resolved.manifest.result_schema_version, "miku-repo-scale.result/v1");
-  assert.equal(resolved.manifest.source_revision, "537fed9edf2e9311f494cda4a5b594395652df2d");
+  assert.equal(resolved.manifest.source_revision, "03c796ecf29bbc14320d0a13e3d317c6f9b32d23");
   assert.match(resolved.manifest.sha256, /^[a-f0-9]{64}$/u);
-  assert.ok(resolved.path.endsWith("miku-repo-scale-0.2.5.mjs"));
+  assert.ok(resolved.path.endsWith("miku-repo-scale-0.2.7.mjs"));
   assert.equal(packageJson.version, resolved.manifest.version);
   assert.equal(packageLock.version, packageJson.version);
   assert.equal(packageLock.packages[""].version, packageJson.version);
@@ -49,8 +49,8 @@ test("resolves the received CLI against its exact version, schema, source, and d
 
 test("manifest selects the pinned version when another version is present", (t) => {
   const { root, runtimeDirectory } = fixture(t);
-  writeFileSync(join(runtimeDirectory, "miku-repo-scale-0.2.4.mjs"), "other version");
-  assert.equal(resolveRuntime(root).path, join(runtimeDirectory, "miku-repo-scale-0.2.5.mjs"));
+  writeFileSync(join(runtimeDirectory, "miku-repo-scale-0.2.6.mjs"), "other version");
+  assert.equal(resolveRuntime(root).path, join(runtimeDirectory, "miku-repo-scale-0.2.7.mjs"));
 });
 
 test("rejects a missing runtime, changed bytes, and an unsupported manifest", (t) => {

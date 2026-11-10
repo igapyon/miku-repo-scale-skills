@@ -4,7 +4,7 @@
 // package.json
 var package_default = {
   name: "miku-repo-scale",
-  version: "0.2.5",
+  version: "0.2.7",
   private: true,
   description: "Deterministic measurement of repository text, source code, instructions, data, and binary assets.",
   license: "Apache-2.0",
@@ -426,7 +426,7 @@ function resolveRepositoryRoot(requestedRoot) {
     if (error.message === "Bare Git repositories are not supported") throw error;
     throw new Error("Path is not inside a Git working tree");
   }
-  if (requestedRoot !== void 0 && realpathSync(probePath) !== gitRoot) {
+  if (requestedRoot !== void 0 && gitText(probePath, ["rev-parse", "--show-prefix"]) !== "") {
     throw new Error("The supplied path is a subdirectory; provide the Git working-tree root");
   }
   return gitRoot;
