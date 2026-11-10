@@ -42,7 +42,7 @@ test("accepts repository size, text, JSON/JSONL, instructions, definitions, Type
   const output = runCli([
     "analyze", root, "--inventory", "all", "--detail", "files", "--config", config,
   ], { skillRoot });
-  assert.equal(output.exitCode, 0);
+  assert.equal(output.exitCode, 0, JSON.stringify(output.result.diagnostics));
   const result = output.result;
   assert.equal(result.status, "ok");
   assert.equal(result.summary.totals.files, 11);

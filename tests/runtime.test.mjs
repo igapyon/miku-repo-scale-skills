@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -8,6 +8,8 @@ import { fileURLToPath } from "node:url";
 import { resolveRuntime } from "../skills/igapyon-miku-repo-scale/lib/runtime.mjs";
 
 const skillRoot = fileURLToPath(new URL("../skills/igapyon-miku-repo-scale/", import.meta.url));
+const packageJson = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+const packageLock = JSON.parse(readFileSync(new URL("../package-lock.json", import.meta.url), "utf8"));
 const payload = Buffer.from("#!/usr/bin/env node\nprocess.exit(0);\n");
 
 function fixture(t, overrides = {}) {
@@ -17,11 +19,11 @@ function fixture(t, overrides = {}) {
   const manifest = {
     schema_version: "miku-repo-scale.skill-runtime/v1",
     product: "miku-repo-scale",
-    artifact: "miku-repo-scale-0.2.1.mjs",
-    version: "0.2.1",
+    artifact: "miku-repo-scale-0.2.5.mjs",
+    version: "0.2.5",
     ruleset_version: "1.4.0",
     result_schema_version: "miku-repo-scale.result/v1",
-    source_revision: "ad09e61d8a50d39ebaa50dfad7521d4acd53b02b",
+    source_revision: "537fed9edf2e9311f494cda4a5b594395652df2d",
     sha256: createHash("sha256").update(payload).digest("hex"),
     ...overrides,
   };
@@ -33,18 +35,22 @@ function fixture(t, overrides = {}) {
 
 test("resolves the received CLI against its exact version, schema, source, and digest", () => {
   const resolved = resolveRuntime(skillRoot);
-  assert.equal(resolved.manifest.version, "0.2.1");
+  assert.equal(resolved.manifest.version, "0.2.5");
   assert.equal(resolved.manifest.ruleset_version, "1.4.0");
   assert.equal(resolved.manifest.result_schema_version, "miku-repo-scale.result/v1");
-  assert.equal(resolved.manifest.source_revision, "ad09e61d8a50d39ebaa50dfad7521d4acd53b02b");
+  assert.equal(resolved.manifest.source_revision, "537fed9edf2e9311f494cda4a5b594395652df2d");
   assert.match(resolved.manifest.sha256, /^[a-f0-9]{64}$/u);
-  assert.ok(resolved.path.endsWith("miku-repo-scale-0.2.1.mjs"));
+  assert.ok(resolved.path.endsWith("miku-repo-scale-0.2.5.mjs"));
+  assert.equal(packageJson.version, resolved.manifest.version);
+  assert.equal(packageLock.version, packageJson.version);
+  assert.equal(packageLock.packages[""].version, packageJson.version);
+  assert.deepEqual(packageJson.skillRuntimeArtifacts, [`runtime/${resolved.manifest.artifact}`]);
 });
 
 test("manifest selects the pinned version when another version is present", (t) => {
   const { root, runtimeDirectory } = fixture(t);
-  writeFileSync(join(runtimeDirectory, "miku-repo-scale-0.2.2.mjs"), "other version");
-  assert.equal(resolveRuntime(root).path, join(runtimeDirectory, "miku-repo-scale-0.2.1.mjs"));
+  writeFileSync(join(runtimeDirectory, "miku-repo-scale-0.2.4.mjs"), "other version");
+  assert.equal(resolveRuntime(root).path, join(runtimeDirectory, "miku-repo-scale-0.2.5.mjs"));
 });
 
 test("rejects a missing runtime, changed bytes, and an unsupported manifest", (t) => {
@@ -69,6 +75,6 @@ test("rejects a missing runtime, changed bytes, and an unsupported manifest", (t
 });
 
 test("rejects a version and artifact basename mismatch", (t) => {
-  const mismatch = fixture(t, { version: "0.2.2" });
+  const mismatch = fixture(t, { version: "0.2.3" });
   assert.throws(() => resolveRuntime(mismatch.root), { code: "RUNTIME_MANIFEST_INVALID" });
 });

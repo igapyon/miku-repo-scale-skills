@@ -1,6 +1,6 @@
 # CLI operation and runtime
 
-Runtime `0.2.1` is pinned by [`runtime/runtime.json`](../runtime/runtime.json).
+Runtime `0.2.5` is pinned by [`runtime/runtime.json`](../runtime/runtime.json).
 The thin adapter verifies the runtime digest and embedded version, invokes it
 with an argument array, parses result JSON, and checks the result schema marker,
 required envelope fields, coverage counts, ruleset, and exit-code/status match.
